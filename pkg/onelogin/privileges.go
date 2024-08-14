@@ -81,12 +81,12 @@ func (sdk *OneloginSDK) GetPrivilegeUsers(privilegeID int) (interface{}, error) 
 	return utl.CheckHTTPResponse(resp)
 }
 
-func (sdk *OneloginSDK) AssignUsersToPrivilege(privilegeID int) (interface{}, error) {
+func (sdk *OneloginSDK) AssignUsersToPrivilege(privilegeID int, userIds []int) (interface{}, error) {
 	p, err := utl.BuildAPIPath(PrivilegesPath, privilegeID, "users")
 	if err != nil {
 		return nil, err
 	}
-	resp, err := sdk.Client.Put(&p, nil)
+	resp, err := sdk.Client.Post(&p, map[string][]int{"users": userIds})
 	if err != nil {
 		return nil, err
 	}
