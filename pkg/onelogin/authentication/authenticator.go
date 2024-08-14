@@ -20,6 +20,8 @@ const (
 type Authenticator struct {
 	accessToken string
 	subdomain   string
+	expiresIn   int
+	accountId   string
 }
 
 func NewAuthenticator(subdomain string) *Authenticator {
@@ -87,6 +89,17 @@ func (a *Authenticator) GenerateToken() error {
 	if !ok {
 		return olError.NewAuthenticationError("Authentication Failed at Endpoint")
 	}
+
+	accountId, ok := result["account_id"].(int)
+	if ok {
+		a.accountId = fmt.Sprintf("%d", accountId)
+	}
+
+	expiresIn, ok := result["expires_in"].(int)
+	if ok {
+		a.expiresIn = expiresIn
+	}
+
 	// Store access token
 	a.accessToken = accessToken
 
@@ -150,4 +163,8 @@ func (a *Authenticator) RevokeToken(token *string) error {
 
 func (a *Authenticator) GetToken() (string, error) {
 	return a.accessToken, nil
+}
+
+func (a *Authenticator) GetAccountId() string {
+	return a.accountId
 }
