@@ -90,14 +90,14 @@ func (a *Authenticator) GenerateToken() error {
 		return olError.NewAuthenticationError("Authentication Failed at Endpoint")
 	}
 
-	accountId, ok := result["account_id"].(int)
+	accountId, ok := result["account_id"].(float64)
 	if ok {
-		a.accountId = fmt.Sprintf("%d", accountId)
+		a.accountId = fmt.Sprintf("%d", int(accountId))
 	}
 
-	expiresIn, ok := result["expires_in"].(int)
+	expiresIn, ok := result["expires_in"].(float64)
 	if ok {
-		a.expiresIn = expiresIn
+		a.expiresIn = int(expiresIn)
 	}
 
 	// Store access token
