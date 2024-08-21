@@ -16,7 +16,7 @@ type Role struct {
 	Users  []int32 `json:"users,omitempty"`
 }
 
-func (r *Role) GetKeyValidators() map[string]func(interface{}) bool {
+func (r *RoleQuery) GetKeyValidators() map[string]func(interface{}) bool {
 	return map[string]func(interface{}) bool{
 		"limit":  validateString,
 		"page":   validateString,
