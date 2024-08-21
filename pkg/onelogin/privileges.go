@@ -33,7 +33,7 @@ func (sdk *OneloginSDK) CreatePrivilege(privilege models.Privilege) (interface{}
 	return utl.CheckHTTPResponse(resp)
 }
 
-func (sdk *OneloginSDK) GetPrivilege(privilegeID int) (interface{}, error) {
+func (sdk *OneloginSDK) GetPrivilege(privilegeID string) (interface{}, error) {
 	p, err := utl.BuildAPIPath(PrivilegesPath, privilegeID)
 	if err != nil {
 		return nil, err
@@ -45,7 +45,7 @@ func (sdk *OneloginSDK) GetPrivilege(privilegeID int) (interface{}, error) {
 	return utl.CheckHTTPResponse(resp)
 }
 
-func (sdk *OneloginSDK) DeletePrivilege(privilegeID int) (interface{}, error) {
+func (sdk *OneloginSDK) DeletePrivilege(privilegeID string) (interface{}, error) {
 	p, err := utl.BuildAPIPath(PrivilegesPath, privilegeID)
 	if err != nil {
 		return nil, err
@@ -57,7 +57,7 @@ func (sdk *OneloginSDK) DeletePrivilege(privilegeID int) (interface{}, error) {
 	return utl.CheckHTTPResponse(resp)
 }
 
-func (sdk *OneloginSDK) UpdatePrivilege(privilegeID int) (interface{}, error) {
+func (sdk *OneloginSDK) UpdatePrivilege(privilegeID string) (interface{}, error) {
 	p, err := utl.BuildAPIPath(PrivilegesPath, privilegeID)
 	if err != nil {
 		return nil, err
@@ -69,7 +69,7 @@ func (sdk *OneloginSDK) UpdatePrivilege(privilegeID int) (interface{}, error) {
 	return utl.CheckHTTPResponse(resp)
 }
 
-func (sdk *OneloginSDK) GetPrivilegeUsers(privilegeID int) (interface{}, error) {
+func (sdk *OneloginSDK) GetPrivilegeUsers(privilegeID string) (interface{}, error) {
 	p, err := utl.BuildAPIPath(PrivilegesPath, privilegeID, "users")
 	if err != nil {
 		return nil, err
@@ -81,7 +81,7 @@ func (sdk *OneloginSDK) GetPrivilegeUsers(privilegeID int) (interface{}, error) 
 	return utl.CheckHTTPResponse(resp)
 }
 
-func (sdk *OneloginSDK) AssignUsersToPrivilege(privilegeID int, userIds []int) (interface{}, error) {
+func (sdk *OneloginSDK) AssignUsersToPrivilege(privilegeID string, userIds []int) (interface{}, error) {
 	p, err := utl.BuildAPIPath(PrivilegesPath, privilegeID, "users")
 	if err != nil {
 		return nil, err
@@ -93,7 +93,7 @@ func (sdk *OneloginSDK) AssignUsersToPrivilege(privilegeID int, userIds []int) (
 	return utl.CheckHTTPResponse(resp)
 }
 
-func (sdk *OneloginSDK) RemovePrivilegeFromUser(privilegeID int, userID int) (interface{}, error) {
+func (sdk *OneloginSDK) RemovePrivilegeFromUser(privilegeID string, userID int) (interface{}, error) {
 	p, err := utl.BuildAPIPath(PrivilegesPath, privilegeID, "users", userID)
 	if err != nil {
 		return nil, err
@@ -105,7 +105,7 @@ func (sdk *OneloginSDK) RemovePrivilegeFromUser(privilegeID int, userID int) (in
 	return utl.CheckHTTPResponse(resp)
 }
 
-func (sdk *OneloginSDK) GetPrivilegeRoles(privilegeID int) (interface{}, error) {
+func (sdk *OneloginSDK) GetPrivilegeRoles(privilegeID string) (interface{}, error) {
 	p, err := utl.BuildAPIPath(PrivilegesPath, privilegeID, "roles")
 	if err != nil {
 		return nil, err
@@ -117,7 +117,7 @@ func (sdk *OneloginSDK) GetPrivilegeRoles(privilegeID int) (interface{}, error) 
 	return utl.CheckHTTPResponse(resp)
 }
 
-func (sdk *OneloginSDK) AddPrivilegeToRole(privilegeID int, roleID int) (interface{}, error) {
+func (sdk *OneloginSDK) AddPrivilegeToRole(privilegeID string, roleID int) (interface{}, error) {
 	p, err := utl.BuildAPIPath(PrivilegesPath, privilegeID, "roles", roleID)
 	if err != nil {
 		return nil, err
@@ -129,7 +129,7 @@ func (sdk *OneloginSDK) AddPrivilegeToRole(privilegeID int, roleID int) (interfa
 	return utl.CheckHTTPResponse(resp)
 }
 
-func (sdk *OneloginSDK) DeleteRoleFromPrivilege(privilegeID int, roleID int) (interface{}, error) {
+func (sdk *OneloginSDK) DeleteRoleFromPrivilege(privilegeID string, roleID int) (interface{}, error) {
 	p, err := utl.BuildAPIPath(PrivilegesPath, privilegeID, "roles", roleID)
 	if err != nil {
 		return nil, err
