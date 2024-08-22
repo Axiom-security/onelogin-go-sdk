@@ -1,7 +1,6 @@
 package onelogin
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 
@@ -164,11 +163,11 @@ func (sdk *OneloginSDK) AssignRolesToUser(userID int, roles []int) (interface{},
 		return nil, err
 	}
 	payload := map[string][]int{"role_id_array": roles}
-	payloadBytes, err := json.Marshal(payload)
+	payloadMarshalled, err := json.Marshal(payload)
 	if err != nil {
 		return nil, err
 	}
-	resp, err := sdk.Client.Put(&p, bytes.NewBuffer(payloadBytes))
+	resp, err := sdk.Client.Put(&p, string(payloadMarshalled))
 	if err != nil {
 		return nil, err
 	}
