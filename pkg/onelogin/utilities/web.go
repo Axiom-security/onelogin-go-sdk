@@ -15,7 +15,7 @@ import (
 // else return error
 func CheckHTTPResponse(resp *http.Response) (interface{}, error) {
 	// Check if the request was successful
-	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusNoContent {
 		errMessage := fmt.Sprintf("request failed with status: %d", resp.StatusCode)
 		body, err := ioutil.ReadAll(resp.Body)
 		if err == nil {
