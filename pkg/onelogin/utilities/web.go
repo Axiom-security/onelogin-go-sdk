@@ -18,7 +18,7 @@ func CheckHTTPResponse(resp *http.Response) (interface{}, error) {
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
 		errMessage := fmt.Sprintf("request failed with status: %d", resp.StatusCode)
 		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
+		if err == nil {
 			errMessage = fmt.Sprintf("Error data: %v. %s", string(body), errMessage)
 		}
 		return nil, fmt.Errorf(errMessage)
