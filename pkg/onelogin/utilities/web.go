@@ -40,6 +40,9 @@ func parseResponseHeadersToMetadata(resp *http.Response) models.ResponseWithMeta
 	if err != nil {
 		res.Error = err
 	}
+	res.RateLimitLimit, _ = strconv.Atoi(hd.Get("X-RateLimit-Limit"))
+	res.RateLimitRemaining, _ = strconv.Atoi(hd.Get("X-RateLimit-Remaining"))
+	res.RateLimitReset, _ = strconv.Atoi(hd.Get("X-RateLimit-Reset"))
 	return res
 }
 
@@ -70,6 +73,7 @@ func CheckHTTPResponse(resp *http.Response) (*models.ResponseWithMetadata, error
 
 	// Try to unmarshal the response body into a map[string]interface{} or []interface{}
 	var data interface{}
+	var nextCursorInData, prevCursorInData string
 	bodyStr := string(body)
 	//log.Printf("Response body: %s\n", bodyStr)
 	if strings.HasPrefix(bodyStr, "[") {
@@ -85,6 +89,8 @@ func CheckHTTPResponse(resp *http.Response) (*models.ResponseWithMetadata, error
 		if err != nil {
 			return nil, fmt.Errorf("failed to unmarshal response body into map[string]interface{}: %w", err)
 		}
+		prevCursorInData, _ = dict["before_cursor"].(string)
+		nextCursorInData, _ = dict["after_cursor"].(string)
 		data = dict
 	} else {
 		data = bodyStr
@@ -92,6 +98,13 @@ func CheckHTTPResponse(resp *http.Response) (*models.ResponseWithMetadata, error
 
 	res := parseResponseHeadersToMetadata(resp)
 	res.Data = data
+
+	if prevCursorInData != "" {
+		res.PrevCursor = prevCursorInData
+	}
+	if nextCursorInData != "" {
+		res.NextCursor = nextCursorInData
+	}
 
 	//log.Printf("Response body unmarshaled successfully: %v\n", data)
 	return &res, nil
