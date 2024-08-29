@@ -3,17 +3,49 @@ package utilities
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/onelogin/onelogin-go-sdk/v4/pkg/onelogin/models"
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 
 	olerror "github.com/onelogin/onelogin-go-sdk/v4/pkg/onelogin/error"
 )
 
+func parseResponseHeadersToMetadata(resp *http.Response) models.ResponseWithMetadata {
+	var err error
+	hd := resp.Header
+	beforeCursor := hd.Get("Before-Cursor")
+	if beforeCursor == "" {
+		beforeCursor = hd.Get("Cursor")
+	}
+	res := models.ResponseWithMetadata{
+		PrevCursor: beforeCursor,
+		NextCursor: hd.Get("After-Cursor"),
+	}
+	res.CurrentPage, err = strconv.Atoi(hd.Get("Current-Page"))
+	if err != nil {
+		res.Error = err
+	}
+	res.PageItems, err = strconv.Atoi(hd.Get("Page-Items"))
+	if err != nil {
+		res.Error = err
+	}
+	res.TotalCount, err = strconv.Atoi(hd.Get("Total-Count"))
+	if err != nil {
+		res.Error = err
+	}
+	res.TotalPages, err = strconv.Atoi(hd.Get("Total-Pages"))
+	if err != nil {
+		res.Error = err
+	}
+	return res
+}
+
 // receive http response, check error code status, if good return json of resp.Body
 // else return error
-func CheckHTTPResponse(resp *http.Response) (interface{}, error) {
+func CheckHTTPResponse(resp *http.Response) (*models.ResponseWithMetadata, error) {
 	// Check if the request was successful
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusNoContent {
 		errMessage := fmt.Sprintf("request failed with status: %d", resp.StatusCode)
@@ -58,8 +90,11 @@ func CheckHTTPResponse(resp *http.Response) (interface{}, error) {
 		data = bodyStr
 	}
 
+	res := parseResponseHeadersToMetadata(resp)
+	res.Data = data
+
 	//log.Printf("Response body unmarshaled successfully: %v\n", data)
-	return data, nil
+	return &res, nil
 }
 
 func BuildAPIPath(parts ...interface{}) (string, error) {
