@@ -21,28 +21,30 @@ func parseResponseHeadersToMetadata(resp *http.Response) models.ResponseWithMeta
 		beforeCursor = hd.Get("Cursor")
 	}
 	res := models.ResponseWithMetadata{
-		PrevCursor: beforeCursor,
-		NextCursor: hd.Get("After-Cursor"),
+		Metadata: models.ResponseMetadata{
+			PrevCursor: beforeCursor,
+			NextCursor: hd.Get("After-Cursor"),
+		},
 	}
-	res.CurrentPage, err = strconv.Atoi(hd.Get("Current-Page"))
+	res.Metadata.CurrentPage, err = strconv.Atoi(hd.Get("Current-Page"))
 	if err != nil {
 		res.Error = err
 	}
-	res.PageItems, err = strconv.Atoi(hd.Get("Page-Items"))
+	res.Metadata.PageItems, err = strconv.Atoi(hd.Get("Page-Items"))
 	if err != nil {
 		res.Error = err
 	}
-	res.TotalCount, err = strconv.Atoi(hd.Get("Total-Count"))
+	res.Metadata.TotalCount, err = strconv.Atoi(hd.Get("Total-Count"))
 	if err != nil {
 		res.Error = err
 	}
-	res.TotalPages, err = strconv.Atoi(hd.Get("Total-Pages"))
+	res.Metadata.TotalPages, err = strconv.Atoi(hd.Get("Total-Pages"))
 	if err != nil {
 		res.Error = err
 	}
-	res.RateLimitLimit, _ = strconv.Atoi(hd.Get("X-RateLimit-Limit"))
-	res.RateLimitRemaining, _ = strconv.Atoi(hd.Get("X-RateLimit-Remaining"))
-	res.RateLimitReset, _ = strconv.Atoi(hd.Get("X-RateLimit-Reset"))
+	res.Metadata.RateLimitLimit, _ = strconv.Atoi(hd.Get("X-RateLimit-Limit"))
+	res.Metadata.RateLimitRemaining, _ = strconv.Atoi(hd.Get("X-RateLimit-Remaining"))
+	res.Metadata.RateLimitReset, _ = strconv.Atoi(hd.Get("X-RateLimit-Reset"))
 	return res
 }
 
@@ -100,10 +102,10 @@ func CheckHTTPResponse(resp *http.Response) (*models.ResponseWithMetadata, error
 	res.Data = data
 
 	if prevCursorInData != "" {
-		res.PrevCursor = prevCursorInData
+		res.Metadata.PrevCursor = prevCursorInData
 	}
 	if nextCursorInData != "" {
-		res.NextCursor = nextCursorInData
+		res.Metadata.NextCursor = nextCursorInData
 	}
 
 	//log.Printf("Response body unmarshaled successfully: %v\n", data)
