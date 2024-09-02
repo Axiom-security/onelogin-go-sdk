@@ -9,12 +9,12 @@ const (
 	PrivilegesPath string = "api/1/privileges"
 )
 
-func (sdk *OneloginSDK) ListPrivileges() (interface{}, error) {
+func (sdk *OneloginSDK) ListPrivileges(queryParams models.Queryable) (interface{}, error) {
 	p, err := utl.BuildAPIPath(PrivilegesPath)
 	if err != nil {
 		return nil, err
 	}
-	resp, err := sdk.Client.Get(&p, nil)
+	resp, err := sdk.Client.Get(&p, queryParams)
 	if err != nil {
 		return nil, err
 	}

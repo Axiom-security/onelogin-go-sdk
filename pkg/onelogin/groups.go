@@ -1,6 +1,9 @@
 package onelogin
 
-import utl "github.com/onelogin/onelogin-go-sdk/v4/pkg/onelogin/utilities"
+import (
+	mod "github.com/onelogin/onelogin-go-sdk/v4/pkg/onelogin/models"
+	utl "github.com/onelogin/onelogin-go-sdk/v4/pkg/onelogin/utilities"
+)
 
 const (
 	GroupsPath = "api/1/groups"
@@ -18,12 +21,12 @@ func (sdk *OneloginSDK) GetGroupByID(groupID int) (interface{}, error) {
 	return utl.CheckHTTPResponse(resp)
 }
 
-func (sdk *OneloginSDK) GetGroups() (interface{}, error) {
+func (sdk *OneloginSDK) GetGroups(queryParams mod.Queryable) (interface{}, error) {
 	p, err := utl.BuildAPIPath(GroupsPath)
 	if err != nil {
 		return nil, err
 	}
-	resp, err := sdk.Client.Get(&p, nil)
+	resp, err := sdk.Client.Get(&p, queryParams)
 	if err != nil {
 		return nil, err
 	}
