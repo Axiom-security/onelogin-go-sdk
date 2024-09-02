@@ -1,10 +1,8 @@
 package models
 
 type AuthServerQuery struct {
-	Name   string `json:"name,omitempty"`
-	Limit  string `json:"limit,omitempty"`
-	Page   string `json:"page,omitempty"`
-	Cursor string `json:"cursor,omitempty"`
+	Name string `json:"name,omitempty"`
+	BaseQueryRequest
 }
 
 type AuthServer struct {

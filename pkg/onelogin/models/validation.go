@@ -6,6 +6,9 @@ import (
 
 type Queryable interface {
 	GetKeyValidators() map[string]func(interface{}) bool
+	SetLimit(limit string)
+	SetPage(page string)
+	SetCursor(cursor string)
 }
 
 // validateString checks if the provided value is a string.

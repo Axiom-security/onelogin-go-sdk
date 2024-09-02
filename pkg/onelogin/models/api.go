@@ -17,3 +17,21 @@ type ResponseWithMetadata struct {
 	Metadata ResponseMetadata `json:"metadata"`
 	Error    error            `json:"error"`
 }
+
+type BaseQueryRequest struct {
+	Limit  string `json:"limit,omitempty"`
+	Page   string `json:"page,omitempty"`
+	Cursor string `json:"cursor,omitempty"`
+}
+
+func (b *BaseQueryRequest) SetLimit(limit string) {
+	b.Limit = limit
+}
+
+func (b *BaseQueryRequest) SetPage(page string) {
+	b.Page = page
+}
+
+func (b *BaseQueryRequest) SetCursor(cursor string) {
+	b.Cursor = cursor
+}

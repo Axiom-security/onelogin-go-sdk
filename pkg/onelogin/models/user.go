@@ -23,9 +23,7 @@ const (
 
 // UserQuery represents available query parameters
 type UserQuery struct {
-	Limit          string     `json:"limit,omitempty"`
-	Page           string     `json:"page,omitempty"`
-	Cursor         string     `json:"cursor,omitempty"`
+	BaseQueryRequest
 	CreatedSince   *time.Time `json:"created_since,omitempty"`
 	CreatedUntil   *time.Time `json:"created_until,omitempty"`
 	UpdatedSince   *time.Time `json:"updated_since,omitempty"`

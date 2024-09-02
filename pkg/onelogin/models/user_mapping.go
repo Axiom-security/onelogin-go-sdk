@@ -2,9 +2,7 @@ package models
 
 // UserMappingsQuery represents available query parameters for mappings
 type UserMappingsQuery struct {
-	Limit            string `json:"limit,omitempty"`
-	Page             string `json:"page,omitempty"`
-	Cursor           string `json:"cursor,omitempty"`
+	BaseQueryRequest
 	HasCondition     string `json:"has_condition,omitempty"`
 	HasConditionType string `json:"has_condition_type,omitempty"`
 	HasAction        string `json:"has_action,omitempty"`
