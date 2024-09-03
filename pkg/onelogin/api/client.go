@@ -37,8 +37,19 @@ type Authenticator interface {
 	NewAuthenticator() *authentication.Authenticator
 }
 
+//go:generate mockery --name=IClient --output=mocks --with-expecter=true
+type IClient interface {
+	Get(path *string, queryParams mod.Queryable) (*http.Response, error)
+	Delete(path *string) (*http.Response, error)
+	DeleteWithBody(path *string, body interface{}) (*http.Response, error)
+	Post(path *string, body interface{}) (*http.Response, error)
+	Put(path *string, body interface{}) (*http.Response, error)
+	GetToken() (string, error)
+	GetAccountId() string
+}
+
 // NewClient creates a new instance of the API client.
-func NewClient() (*Client, error) {
+func NewClient() (IClient, error) {
 	subdomain := os.Getenv("ONELOGIN_SUBDOMAIN")
 	old := fmt.Sprintf("https://%s.onelogin.com", subdomain)
 	authenticator := authentication.NewAuthenticator(subdomain)
@@ -188,4 +199,12 @@ func (c *Client) sendRequest(req *http.Request) (*http.Response, error) {
 	}
 
 	return resp, nil
+}
+
+func (c *Client) GetToken() (string, error) {
+	return c.Auth.GetToken()
+}
+
+func (c *Client) GetAccountId() string {
+	return c.Auth.GetAccountId()
 }
