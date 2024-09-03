@@ -5,3 +5,15 @@ type Group struct {
 	Name      string  `json:"name"`
 	Reference *string `json:"reference"`
 }
+
+type GroupQuery struct {
+	BaseQueryRequest
+}
+
+func (p *GroupQuery) GetKeyValidators() map[string]func(interface{}) bool {
+	return map[string]func(interface{}) bool{
+		"limit":  validateString,
+		"page":   validateString,
+		"cursor": validateString,
+	}
+}

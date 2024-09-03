@@ -28,7 +28,7 @@ type StatementData struct {
 	Scope  []string `json:"Scope"`
 }
 
-func (p *Privilege) GetKeyValidators() map[string]func(interface{}) bool {
+func (p *PrivilegeQuery) GetKeyValidators() map[string]func(interface{}) bool {
 	return map[string]func(interface{}) bool{
 		"limit":  validateString,
 		"page":   validateString,
