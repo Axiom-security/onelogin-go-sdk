@@ -19,3 +19,7 @@ func (p *GroupQuery) GetKeyValidators() map[string]func(interface{}) bool {
 		"after_cursor": validateString,
 	}
 }
+
+func (p *GroupQuery) SetCursor(cursor string) {
+	p.Cursor = cursor
+}
