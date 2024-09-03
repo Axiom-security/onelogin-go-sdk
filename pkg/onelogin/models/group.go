@@ -7,9 +7,9 @@ type Group struct {
 }
 
 type GroupQuery struct {
-	BaseQueryRequest
 	// Group object uses an old cursor field name
 	Cursor string `json:"after_cursor,omitempty"`
+	BaseQueryRequest
 }
 
 func (p *GroupQuery) GetKeyValidators() map[string]func(interface{}) bool {
