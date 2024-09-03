@@ -2303,6 +2303,51 @@ func (_c *IOneLoginSDK_GenerateSAMLAssertion_Call) RunAndReturn(run func(models.
 	return _c
 }
 
+// GetAccountId provides a mock function with given fields:
+func (_m *IOneLoginSDK) GetAccountId() string {
+	ret := _m.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAccountId")
+	}
+
+	var r0 string
+	if rf, ok := ret.Get(0).(func() string); ok {
+		r0 = rf()
+	} else {
+		r0 = ret.Get(0).(string)
+	}
+
+	return r0
+}
+
+// IOneLoginSDK_GetAccountId_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAccountId'
+type IOneLoginSDK_GetAccountId_Call struct {
+	*mock.Call
+}
+
+// GetAccountId is a helper method to define mock.On call
+func (_e *IOneLoginSDK_Expecter) GetAccountId() *IOneLoginSDK_GetAccountId_Call {
+	return &IOneLoginSDK_GetAccountId_Call{Call: _e.mock.On("GetAccountId")}
+}
+
+func (_c *IOneLoginSDK_GetAccountId_Call) Run(run func()) *IOneLoginSDK_GetAccountId_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run()
+	})
+	return _c
+}
+
+func (_c *IOneLoginSDK_GetAccountId_Call) Return(_a0 string) *IOneLoginSDK_GetAccountId_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *IOneLoginSDK_GetAccountId_Call) RunAndReturn(run func() string) *IOneLoginSDK_GetAccountId_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetAppByID provides a mock function with given fields: id, queryParams
 func (_m *IOneLoginSDK) GetAppByID(id int, queryParams models.Queryable) (interface{}, error) {
 	ret := _m.Called(id, queryParams)
