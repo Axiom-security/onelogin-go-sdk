@@ -14,6 +14,7 @@ type OneloginSDK struct {
 //go:generate mockery --name=IOneLoginSDK --with-expecter=true --output=mocks
 type IOneLoginSDK interface {
 	GetToken() (string, error)
+	GetAccountId() string
 	GenerateInviteLink(email string) (interface{}, error)
 	ListConnectors() (interface{}, error)
 	SendInviteLink(email string) (interface{}, error)
@@ -158,6 +159,10 @@ func (sdk *OneloginSDK) GetToken() (string, error) {
 		return "", olerror.NewSDKError("Access Token retrieval unsuccessful")
 	}
 	return accessTk, nil
+}
+
+func (sdk *OneloginSDK) GetAccountId() string {
+	return sdk.Client.GetAccountId()
 }
 
 func (sdk *OneloginSDK) GenerateInviteLink(email string) (interface{}, error) {
