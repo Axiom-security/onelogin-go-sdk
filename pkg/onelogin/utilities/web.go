@@ -91,8 +91,11 @@ func CheckHTTPResponse(resp *http.Response) (*models.ResponseWithMetadata, error
 		if err != nil {
 			return nil, fmt.Errorf("failed to unmarshal response body into map[string]interface{}: %w", err)
 		}
-		prevCursorInData, _ = dict["before_cursor"].(string)
-		nextCursorInData, _ = dict["after_cursor"].(string)
+		paginationSection, hasPaginationData := dict["pagination"].(map[string]interface{})
+		if hasPaginationData {
+			prevCursorInData, _ = paginationSection["before_cursor"].(string)
+			nextCursorInData, _ = paginationSection["after_cursor"].(string)
+		}
 		data = dict
 	} else {
 		data = bodyStr
