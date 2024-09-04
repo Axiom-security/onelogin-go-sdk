@@ -1,5 +1,11 @@
 package models
 
+type APICredentials struct {
+	ClientID     string `json:"client_id"`
+	ClientSecret string `json:"client_secret"`
+	Subdomain    string `json:"subdomain"`
+}
+
 type ResponseMetadata struct {
 	CurrentPage        int    `json:"current_page"`
 	PageItems          int    `json:"items_count"`

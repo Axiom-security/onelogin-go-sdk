@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	mod "github.com/onelogin/onelogin-go-sdk/v4/pkg/onelogin/models"
 	"net/http"
 	"os"
 	"strings"
@@ -18,24 +19,31 @@ const (
 )
 
 type Authenticator struct {
-	accessToken string
-	subdomain   string
-	expiresIn   int
-	accountId   string
+	accessToken         string
+	subdomain           string
+	expiresIn           int
+	accountId           string
+	credentialsOverride *mod.APICredentials
 }
 
-func NewAuthenticator(subdomain string) *Authenticator {
-	return &Authenticator{subdomain: subdomain}
+func NewAuthenticator(subdomain string, credentialsOverride *mod.APICredentials) *Authenticator {
+	return &Authenticator{subdomain: subdomain, credentialsOverride: credentialsOverride}
 }
 
 func (a *Authenticator) GenerateToken() error {
 	// Read & Check environment variables
 	clientID := os.Getenv("ONELOGIN_CLIENT_ID")
+	clientSecret := os.Getenv("ONELOGIN_CLIENT_SECRET")
+
+	if a.credentialsOverride != nil {
+		clientID = a.credentialsOverride.ClientID
+		clientSecret = a.credentialsOverride.ClientSecret
+	}
+
 	if len(clientID) == 0 {
 		return olError.NewAuthenticationError("Missing ONELOGIN_CLIENT_ID Env Variable")
 	}
-	//fmt.Println("clientID", clientID)
-	clientSecret := os.Getenv("ONELOGIN_CLIENT_SECRET")
+
 	if len(clientSecret) == 0 {
 		return olError.NewAuthenticationError("Missing ONELOGIN_CLIENT_SECRET Env Variable")
 	}
@@ -110,6 +118,11 @@ func (a *Authenticator) RevokeToken(token *string) error {
 	// Read environment variables
 	clientID := os.Getenv("ONELOGIN_CLIENT_ID")
 	clientSecret := os.Getenv("ONELOGIN_CLIENT_SECRET")
+
+	if a.credentialsOverride != nil {
+		clientID = a.credentialsOverride.ClientID
+		clientSecret = a.credentialsOverride.ClientSecret
+	}
 
 	// Check if required environment variables are missing
 	if clientID == "" || clientSecret == "" {

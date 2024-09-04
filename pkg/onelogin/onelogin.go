@@ -4,6 +4,7 @@ import (
 	"github.com/onelogin/onelogin-go-sdk/v4/pkg/onelogin/api"
 	olerror "github.com/onelogin/onelogin-go-sdk/v4/pkg/onelogin/error"
 	mod "github.com/onelogin/onelogin-go-sdk/v4/pkg/onelogin/models"
+	"time"
 )
 
 // OneloginSDK represents the Onelogin SDK.
@@ -143,8 +144,8 @@ type IOneLoginSDK interface {
 }
 
 // NewOneloginSDK creates a new instance of the Onelogin SDK.
-func NewOneloginSDK() (*OneloginSDK, error) {
-	client, err := api.NewClient()
+func NewOneloginSDK(credentials *mod.APICredentials, timeoutOverride *time.Duration) (*OneloginSDK, error) {
+	client, err := api.NewClient(credentials, timeoutOverride)
 	if err != nil {
 		return nil, err
 	}

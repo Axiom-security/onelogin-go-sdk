@@ -22,7 +22,7 @@ func main() {
 	UserQueryOne := models.UserQuery{Email: &UserTwo.Email}
 
 	// Create a new OneLogin SDK client
-	Client, err := onelogin.NewOneloginSDK()
+	Client, err := onelogin.NewOneloginSDK(nil, nil)
 	if err != nil {
 		fmt.Println(err)
 	}

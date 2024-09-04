@@ -18,12 +18,15 @@ import (
 	utl "github.com/onelogin/onelogin-go-sdk/v4/pkg/onelogin/utilities"
 )
 
+const DefaultTimeout = 10
+
 // Client represents the API client.
 type Client struct {
-	HttpClient HTTPClient                    // HTTPClient interface for making HTTP requests
-	Auth       *authentication.Authenticator // Authenticator for managing authentication
-	OLdomain   string                        // OneLogin domain
-	Timeout    time.Duration
+	HttpClient          HTTPClient                    // HTTPClient interface for making HTTP requests
+	Auth                *authentication.Authenticator // Authenticator for managing authentication
+	OLdomain            string                        // OneLogin domain
+	Timeout             time.Duration
+	CredentialsOverride *mod.APICredentials
 }
 
 // HTTPClient is an interface that defines the Do method for making HTTP requests.
@@ -49,18 +52,26 @@ type IClient interface {
 }
 
 // NewClient creates a new instance of the API client.
-func NewClient() (IClient, error) {
+func NewClient(credentials *mod.APICredentials, timeoutOverride *time.Duration) (IClient, error) {
 	subdomain := os.Getenv("ONELOGIN_SUBDOMAIN")
-	old := fmt.Sprintf("https://%s.onelogin.com", subdomain)
-	authenticator := authentication.NewAuthenticator(subdomain)
-	timeoutStr := os.Getenv("ONELOGIN_TIMEOUT")
-	timeout, err := strconv.Atoi(timeoutStr)
-	if err != nil || timeout <= 0 {
-		timeout = 10
+	if credentials != nil {
+		subdomain = credentials.Subdomain
 	}
-	timeoutDuration := time.Second * time.Duration(timeout)
+	old := fmt.Sprintf("https://%s.onelogin.com", subdomain)
+	authenticator := authentication.NewAuthenticator(subdomain, credentials)
+	var timeoutDuration time.Duration
+	if timeoutOverride != nil {
+		timeoutStr := os.Getenv("ONELOGIN_TIMEOUT")
+		timeout, err := strconv.Atoi(timeoutStr)
+		if err != nil || timeout <= 0 {
+			timeout = DefaultTimeout
+		}
+		timeoutDuration = time.Second * time.Duration(timeout)
+	} else {
+		timeoutDuration = time.Second * DefaultTimeout
+	}
 
-	err = authenticator.GenerateToken()
+	err := authenticator.GenerateToken()
 	if err != nil {
 		return nil, err
 	}
@@ -68,8 +79,9 @@ func NewClient() (IClient, error) {
 		HttpClient: &http.Client{
 			Timeout: timeoutDuration,
 		},
-		Auth:     authenticator,
-		OLdomain: old,
+		Auth:                authenticator,
+		OLdomain:            old,
+		CredentialsOverride: credentials,
 	}, nil
 }
 
