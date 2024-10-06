@@ -60,7 +60,7 @@ func NewClient(credentials *mod.APICredentials, timeoutOverride *time.Duration) 
 	old := fmt.Sprintf("https://%s.onelogin.com", subdomain)
 	authenticator := authentication.NewAuthenticator(subdomain, credentials)
 	var timeoutDuration time.Duration
-	if timeoutOverride != nil {
+	if timeoutOverride == nil {
 		timeoutStr := os.Getenv("ONELOGIN_TIMEOUT")
 		timeout, err := strconv.Atoi(timeoutStr)
 		if err != nil || timeout <= 0 {
@@ -68,7 +68,7 @@ func NewClient(credentials *mod.APICredentials, timeoutOverride *time.Duration) 
 		}
 		timeoutDuration = time.Second * time.Duration(timeout)
 	} else {
-		timeoutDuration = time.Second * DefaultTimeout
+		timeoutDuration = *timeoutOverride
 	}
 
 	err := authenticator.GenerateToken()
