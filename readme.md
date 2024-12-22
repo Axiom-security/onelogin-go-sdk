@@ -1,6 +1,8 @@
 
 # Onelogin Go SDK
 
+## FORKED FROM [github.com/onelogin/onelogin-go-sdk/v4]
+
 This is the Onelogin SDK, a Go package that provides a convenient interface for interacting with Onelogin's API. The SDK simplifies the integration process by providing developers an easy-to-use tool for managing authentication, making API requests, and handling responses.
 
 ## Features

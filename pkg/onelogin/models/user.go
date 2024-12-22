@@ -109,7 +109,7 @@ func (q *UserQuery) GetKeyValidators() map[string]func(interface{}) bool {
 type UserApp struct {
 	ID                  *int32  `json:"id,omitempty"`
 	IconURL             *string `json:"icon_url,omitempty"`
-	LoginID             *int32  `json:"login_id,omitempty"`
+	LoginID             *int64  `json:"login_id,omitempty"`
 	ProvisioningStatus  *string `json:"provisioning_status,omitempty"`
 	ProvisioningState   *string `json:"provisioning_state,omitempty"`
 	ProvisioningEnabled *bool   `json:"provisioning_enabled,omitempty"`
