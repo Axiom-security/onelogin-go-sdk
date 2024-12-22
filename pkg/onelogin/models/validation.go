@@ -11,25 +11,33 @@ type Queryable interface {
 	SetCursor(cursor string)
 }
 
-// validateString checks if the provided value is a string.
-func validateString(val interface{}) bool {
-	switch v := val.(type) {
-	case string:
-		return true
+// validateString checks if the value is a valid string
+func validateString(value interface{}) bool {
+	if value == nil {
+		return false
+	}
+
+	switch v := value.(type) {
 	case *string:
-		return v != nil
+		return v != nil && *v != ""
+	case string:
+		return v != ""
 	default:
 		return false
 	}
 }
 
-// validateTime checks if the provided value is a time.Time.
-func validateTime(val interface{}) bool {
-	switch v := val.(type) {
-	case time.Time:
-		return true
+// validateTime checks if the value is a valid time.Time
+func validateTime(value interface{}) bool {
+	if value == nil {
+		return false
+	}
+
+	switch v := value.(type) {
 	case *time.Time:
-		return v != nil
+		return v != nil && !v.IsZero()
+	case time.Time:
+		return !v.IsZero()
 	default:
 		return false
 	}
