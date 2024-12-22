@@ -2,8 +2,8 @@ package tests
 
 import (
 	"errors"
-	"testing"
 	"github.com/onelogin/onelogin-go-sdk/v4/pkg/onelogin/error"
+	"testing"
 )
 
 func TestNewSerializationError(t *testing.T) {

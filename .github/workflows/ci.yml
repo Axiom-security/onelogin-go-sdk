@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install git-secrets
+        run: |
+          git clone https://github.com/awslabs/git-secrets.git
+          cd git-secrets
+          sudo make install
+
+      - name: Configure git-secrets
+        run: |
+          # Add security scan patterns
+          git secrets --add '[a-zA-Z]{3,10}://[^/\\s:@]{3,20}:[^/\\s:@]{3,20}@.{1,100}[\"~\\s]'
+          git secrets --add 'AIza[0-9A-Za-z\\-_]{35}'
+          git secrets --add 'LS0tLS1CRUdJTiBQR1AgUFJJVkFURSBLRVkgQkxPQ0stLS0tL[%a-zA-Z0-9+/]+={0,2}'
+          git secrets --add 'LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tL[%a-zA-Z0-9+/]+={0,2}'
+          git secrets --add 'LS0tLS1CRUdJTiBEU0EgUFJJVkFURSBLRVktLS0tL[%a-zA-Z0-9+/]+={0,2}'
+          git secrets --add 'LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0t[%a-zA-Z0-9+/]+={0,2}'
+          git secrets --add 'LS0tLS1CRUdJTiBPUEVOU1NIIFBSSVZBVEUgS0VZLS0tLS[%a-zA-Z0-9+/]+={0,2}'
+          git secrets --add '(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}'
+          git secrets --add '[Tt][Ww][Ii][Tt][Tt][Ee][Rr][^/]{0,50}[0-9a-zA-Z]{35,44}'
+          git secrets --add '[Hh][Oo][Cc][Kk][Ee][Yy].{0,50}(\\\"|~|`)?[0-9a-f]{32}(\\\"|~|`)?'
+          git secrets --add '(QTNU|QUtJQ|QUdQQ|QUlEQ|QVJPQ|QUlQQ|QU5QQ|QU5WQ|QVNJQ)[%a-zA-Z0-9+/]{20,24}={0,2}'
+          git secrets --add 'ya29\\.[0-9A-Za-z\\-_]+'
+          git secrets --add 'https://hooks.slack.com/services/T[a-zA-Z0-9_]{8}/B[a-zA-Z0-9_]{8}/[a-zA-Z0-9_]{24}'
+          git secrets --add '[0-9a-f]{32}-us[0-9]{1,2}'
+          git secrets --add '[Ss][Aa][Uu][Cc][Ee].{0,50}(\\\"|~|`)?[0-9a-f-]{36}(\\\"|~|`)?'
+          git secrets --add '[Ff][Aa][Cc][Ee][Bb][Oo][Oo][Kk][^/]{0,50}(\\\"|~|`)?[0-9a-f]{32}(\\\"|~|`)?'
+          # Add allowed patterns
+          git secrets --add --allowed 'https:\/\/\#\{GITHUB_TOKEN\}:\#\{GITHUB_USERNAME\}@github.*'
+          git secrets --add --allowed 'AKIA[a-zA-Z0-9]{16}'
+          git secrets --add --allowed 'AIzaSyCi9HqVYImAgkqMCG0QmBUXAIfM5lyv_QU'
+
+      - name: Run Security Scan
+        run: git secrets --scan
+
+  go-checks:
+    runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.18"
+
+      - name: Format Check
+        run: |
+          if [ -n "$(go fmt ./...)" ]; then
+            echo "Code is not formatted. Please run 'go fmt ./...'"
+            exit 1
+          fi
+
+      - name: Build
+        run: go build ./...
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Security Check
+        run: make secure
+
+      - name: Test
+        run: |
+          go test ./... -v -race -coverprofile=coverage.txt -covermode=atomic
+          go tool cover -func=coverage.txt
