@@ -30,27 +30,27 @@ func (s *UserTestSuite) TestUserJSONMarshaling() {
 		{
 			name: "full user object",
 			user: User{
-				ID:                   123,
-				Firstname:            "John",
-				Lastname:             "Doe",
-				Email:                "john.doe@example.com",
-				Username:             "johndoe",
-				State:                StateApproved,
-				Status:               StatusActive,
-				GroupID:              "789",
-				DirectoryID:          "456",
-				TrustedIDPID:         "101112",
-				ManagerADID:          "131415",
-				ManagerUserID:        "161718",
-				ExternalID:           "12345",
-				CustomAttributes:     map[string]interface{}{"department": "IT"},
-				CreatedAt:            baseTime,
-				UpdatedAt:            baseTime,
-				ActivatedAt:          baseTime,
-				LastLogin:            baseTime,
-				PasswordChangedAt:    baseTime,
-				LockedUntil:          baseTime,
-				InvitationSentAt:     baseTime,
+				ID:                123,
+				Firstname:         "John",
+				Lastname:          "Doe",
+				Email:             "john.doe@example.com",
+				Username:          "johndoe",
+				State:             StateApproved,
+				Status:            StatusActive,
+				GroupID:           "789",
+				DirectoryID:       "456",
+				TrustedIDPID:      "101112",
+				ManagerADID:       "131415",
+				ManagerUserID:     "161718",
+				ExternalID:        "12345",
+				CustomAttributes:  map[string]interface{}{"department": "IT"},
+				CreatedAt:         baseTime,
+				UpdatedAt:         baseTime,
+				ActivatedAt:       baseTime,
+				LastLogin:         baseTime,
+				PasswordChangedAt: baseTime,
+				LockedUntil:       baseTime,
+				InvitationSentAt:  baseTime,
 			},
 			expected: `{
 				"firstname": "John",
@@ -108,20 +108,20 @@ func (s *UserTestSuite) TestUserJSONMarshaling() {
 		{
 			name: "string IDs with various formats",
 			user: User{
-				ID:                   789,
-				GroupID:              "group-123",
-				DirectoryID:          "dir-456",
-				TrustedIDPID:         "idp-789",
-				ManagerADID:          "ad-101112",
-				ManagerUserID:        "user-131415",
-				ExternalID:           "ext-161718",
-				CreatedAt:            baseTime,
-				UpdatedAt:            baseTime,
-				ActivatedAt:          baseTime,
-				LastLogin:            baseTime,
-				PasswordChangedAt:    baseTime,
-				LockedUntil:          baseTime,
-				InvitationSentAt:     baseTime,
+				ID:                789,
+				GroupID:           "group-123",
+				DirectoryID:       "dir-456",
+				TrustedIDPID:      "idp-789",
+				ManagerADID:       "ad-101112",
+				ManagerUserID:     "user-131415",
+				ExternalID:        "ext-161718",
+				CreatedAt:         baseTime,
+				UpdatedAt:         baseTime,
+				ActivatedAt:       baseTime,
+				LastLogin:         baseTime,
+				PasswordChangedAt: baseTime,
+				LockedUntil:       baseTime,
+				InvitationSentAt:  baseTime,
 			},
 			expected: `{
 				"id": 789,
@@ -144,20 +144,20 @@ func (s *UserTestSuite) TestUserJSONMarshaling() {
 		{
 			name: "large numeric string IDs",
 			user: User{
-				ID:                   2147483647, // max int32
-				GroupID:              "9223372036854775807", // max int64 as string
-				DirectoryID:          "9223372036854775806",
-				TrustedIDPID:         "9223372036854775805",
-				ManagerADID:          "9223372036854775804",
-				ManagerUserID:        "9223372036854775803",
-				ExternalID:           "9223372036854775802",
-				CreatedAt:            baseTime,
-				UpdatedAt:            baseTime,
-				ActivatedAt:          baseTime,
-				LastLogin:            baseTime,
-				PasswordChangedAt:    baseTime,
-				LockedUntil:          baseTime,
-				InvitationSentAt:     baseTime,
+				ID:                2147483647,            // max int32
+				GroupID:           "9223372036854775807", // max int64 as string
+				DirectoryID:       "9223372036854775806",
+				TrustedIDPID:      "9223372036854775805",
+				ManagerADID:       "9223372036854775804",
+				ManagerUserID:     "9223372036854775803",
+				ExternalID:        "9223372036854775802",
+				CreatedAt:         baseTime,
+				UpdatedAt:         baseTime,
+				ActivatedAt:       baseTime,
+				LastLogin:         baseTime,
+				PasswordChangedAt: baseTime,
+				LockedUntil:       baseTime,
+				InvitationSentAt:  baseTime,
 			},
 			expected: `{
 				"id": 2147483647,
@@ -375,8 +375,8 @@ func (s *UserTestSuite) TestUserQueryStringConversions() {
 			query: UserQuery{
 				DirectoryID: strPtr("12345"),
 				ExternalID:  strPtr("67890"),
-				AppID:      strPtr("54321"),
-				UserIDs:    strPtr("1,2,3,4,5"),
+				AppID:       strPtr("54321"),
+				UserIDs:     strPtr("1,2,3,4,5"),
 			},
 			expected: `{
 				"directory_id": "12345",
@@ -385,14 +385,14 @@ func (s *UserTestSuite) TestUserQueryStringConversions() {
 				"user_ids": "1,2,3,4,5"
 			}`,
 			fieldsToCheck: []string{"directoryID", "externalID", "appID", "userIDs"},
-			wantErr:      false,
+			wantErr:       false,
 		},
 		{
 			name: "large numeric strings",
 			query: UserQuery{
-				DirectoryID: strPtr("9223372036854775807"),  // max int64
+				DirectoryID: strPtr("9223372036854775807"), // max int64
 				ExternalID:  strPtr("9223372036854775806"),
-				AppID:      strPtr("9223372036854775805"),
+				AppID:       strPtr("9223372036854775805"),
 			},
 			expected: `{
 				"directory_id": "9223372036854775807",
@@ -400,14 +400,14 @@ func (s *UserTestSuite) TestUserQueryStringConversions() {
 				"app_id": "9223372036854775805"
 			}`,
 			fieldsToCheck: []string{"directoryID", "externalID", "appID"},
-			wantErr:      false,
+			wantErr:       false,
 		},
 		{
 			name: "non-numeric strings",
 			query: UserQuery{
 				DirectoryID: strPtr("dir-123"),
 				ExternalID:  strPtr("ext-456"),
-				AppID:      strPtr("app-789"),
+				AppID:       strPtr("app-789"),
 			},
 			expected: `{
 				"directory_id": "dir-123",
@@ -415,7 +415,7 @@ func (s *UserTestSuite) TestUserQueryStringConversions() {
 				"app_id": "app-789"
 			}`,
 			fieldsToCheck: []string{"directoryID", "externalID", "appID"},
-			wantErr:      true,  // Changed to true since these are not valid numeric strings
+			wantErr:       true, // Changed to true since these are not valid numeric strings
 		},
 		{
 			name: "mixed format IDs list",
@@ -426,15 +426,15 @@ func (s *UserTestSuite) TestUserQueryStringConversions() {
 				"user_ids": "1,abc,3,def-456,5"
 			}`,
 			fieldsToCheck: []string{"userIDs"},
-			wantErr:      false,  // UserIDs can contain non-numeric values
+			wantErr:       false, // UserIDs can contain non-numeric values
 		},
 		{
 			name: "empty strings",
 			query: UserQuery{
 				DirectoryID: strPtr(""),
 				ExternalID:  strPtr(""),
-				AppID:      strPtr(""),
-				UserIDs:    strPtr(""),
+				AppID:       strPtr(""),
+				UserIDs:     strPtr(""),
 			},
 			expected: `{
 				"directory_id": "",
@@ -443,15 +443,15 @@ func (s *UserTestSuite) TestUserQueryStringConversions() {
 				"user_ids": ""
 			}`,
 			fieldsToCheck: []string{"directoryID", "externalID", "appID", "userIDs"},
-			wantErr:      true,
+			wantErr:       true,
 		},
 		{
 			name: "whitespace strings",
 			query: UserQuery{
 				DirectoryID: strPtr("   "),
-					ExternalID:  strPtr("\t"),
-					AppID:      strPtr("\n"),
-					UserIDs:    strPtr(" , , "),
+				ExternalID:  strPtr("\t"),
+				AppID:       strPtr("\n"),
+				UserIDs:     strPtr(" , , "),
 			},
 			expected: `{
 				"directory_id": "   ",
@@ -460,14 +460,14 @@ func (s *UserTestSuite) TestUserQueryStringConversions() {
 				"user_ids": " , , "
 			}`,
 			fieldsToCheck: []string{"directoryID", "externalID", "appID", "userIDs"},
-			wantErr:      true,
+			wantErr:       true,
 		},
 		{
 			name: "invalid numeric strings",
 			query: UserQuery{
 				DirectoryID: strPtr("9223372036854775808"),  // greater than max int64
 				ExternalID:  strPtr("-9223372036854775809"), // less than min int64
-				AppID:      strPtr("123.456"),              // decimal
+				AppID:       strPtr("123.456"),              // decimal
 			},
 			expected: `{
 				"directory_id": "9223372036854775808",
@@ -475,7 +475,7 @@ func (s *UserTestSuite) TestUserQueryStringConversions() {
 				"app_id": "123.456"
 			}`,
 			fieldsToCheck: []string{"directoryID", "externalID", "appID"},
-			wantErr:      true,
+			wantErr:       true,
 		},
 	}
 
