@@ -1,6 +1,8 @@
 package models
 
 import (
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -19,12 +21,63 @@ func validateString(value interface{}) bool {
 
 	switch v := value.(type) {
 	case *string:
-		return v != nil && *v != ""
+		return v != nil && len(strings.TrimSpace(*v)) > 0
 	case string:
-		return v != ""
+		return len(strings.TrimSpace(v)) > 0
 	default:
 		return false
 	}
+}
+
+// validateCommaSeparatedList checks if the value is a valid comma-separated list
+// where each item is non-empty after trimming whitespace
+func validateCommaSeparatedList(value interface{}) bool {
+	if !validateString(value) {
+		return false
+	}
+
+	var str string
+	switch v := value.(type) {
+	case *string:
+		str = *v
+	case string:
+		str = v
+	default:
+		return false
+	}
+
+	// Split by comma and check each item
+	items := strings.Split(str, ",")
+	for _, item := range items {
+		if len(strings.TrimSpace(item)) == 0 {
+			return false
+		}
+	}
+	return true
+}
+
+// validateNumericString checks if the value is a valid numeric string
+func validateNumericString(value interface{}) bool {
+	if !validateString(value) {
+		return false
+	}
+
+	var str string
+	switch v := value.(type) {
+	case *string:
+		str = *v
+	case string:
+		str = v
+	default:
+		return false
+	}
+
+	// Check if it's a valid integer
+	str = strings.TrimSpace(str)
+	if _, err := strconv.ParseInt(str, 10, 64); err != nil {
+		return false
+	}
+	return true
 }
 
 // validateTime checks if the value is a valid time.Time
