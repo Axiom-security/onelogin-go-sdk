@@ -73,12 +73,12 @@ type User struct {
 	State                *int32                 `json:"state,omitempty"`
 	Status               *int32                 `json:"status,omitempty"`
 	InvalidLoginAttempts *int32                 `json:"invalid_login_attempts,omitempty"`
-	GroupID              *int32                 `json:"group_id,omitempty"`
-	DirectoryID          string                 `json:"directory_id,omitempty"`
-	TrustedIDPID         string                 `json:"trusted_idp_id,omitempty"`
-	ManagerADID          string                 `json:"manager_ad_id,omitempty"`
-	ManagerUserID        string                 `json:"manager_user_id,omitempty"`
-	ExternalID           string                 `json:"external_id,omitempty"`
+	GroupID              *int64                 `json:"group_id,omitempty"`
+	DirectoryID          *int64                 `json:"directory_id,omitempty"`
+	TrustedIDPID         *int64                 `json:"trusted_idp_id,omitempty"`
+	ManagerADID          *int64                 `json:"manager_ad_id,omitempty"`
+	ManagerUserID        *int64                 `json:"manager_user_id,omitempty"`
+	ExternalID           *string                `json:"external_id,omitempty"`
 	ID                   *int32                 `json:"id,omitempty"`
 	CustomAttributes     map[string]interface{} `json:"custom_attributes,omitempty"`
 }
